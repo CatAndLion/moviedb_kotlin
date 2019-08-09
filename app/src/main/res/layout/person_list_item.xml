@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                   xmlns:tools="http://schemas.android.com/tools"
+                                   android:layout_width="wrap_content"
+                                   android:layout_height="wrap_content"
+                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                   app:cardBackgroundColor="@color/itemBackground"
+                                   android:layout_margin="@dimen/margin_small"
+                                   app:cardCornerRadius="0dp"
+                                   app:cardElevation="3dp">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="@dimen/profile_width"
+                android:layout_height="@dimen/profile_height"
+                android:scaleType="centerCrop"
+                android:background="@color/pageBackground" />
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin_small">
+
+            <TextView
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    style="@style/TitleTextStyle"
+                    tools:text="Profile name"/>
+
+            <TextView
+                    android:id="@+id/info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    style="@style/TextStyle"
+                    tools:text="Profile info" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

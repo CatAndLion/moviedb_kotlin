@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">moviedb_kotlin</string>
+
+    <string name="title_transition_name" translatable="false">title</string>
+    <string name="poster_transition_name" translatable="false">poster</string>
+
+    <string name="search_item_title">Search</string>
+</resources>

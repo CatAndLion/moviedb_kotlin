@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/itemBackground"
+              android:padding="@dimen/margin_large">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/ratingBar"
+                style="@style/TitleTextStyle.Large"
+                tools:text="Content title"/>
+
+        <TextView
+                android:id="@+id/genre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title"
+                android:layout_alignEnd="@+id/title"
+                style="@style/TextStyle"
+                android:layout_marginBottom="@dimen/margin_default"
+                tools:text="Genre"/>
+
+        <ProgressBar
+                android:id="@+id/ratingBar"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:indeterminate="false"
+                android:progressDrawable="@drawable/circle_progress"
+                android:background="@drawable/circle_progress_bg"
+                android:layout_alignParentEnd="true"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="100"
+                tools:progress="55"/>
+
+        <TextView
+                android:id="@+id/rating"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_alignStart="@+id/ratingBar"
+                android:layout_alignTop="@+id/ratingBar"
+                android:layout_alignEnd="@+id/ratingBar"
+                android:layout_alignBottom="@+id/ratingBar"
+                android:gravity="center"
+                android:lines="1"
+                style="@style/RatingTextStyle"
+                tools:text="50%"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent" 
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:id="@+id/posterImage"
+                android:layout_width="@dimen/poster_width"
+                android:layout_height="@dimen/poster_height"
+                android:background="@color/pageBackground"
+                android:scaleType="centerCrop"
+                android:layout_marginEnd="@dimen/margin_default"/>
+
+        <TextView
+                android:id="@+id/overviewLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/posterImage"
+                android:text="Overview"
+                android:layout_marginBottom="@dimen/margin_small"
+                style="@style/TitleTextStyle"/>
+
+        <TextView
+                android:id="@+id/overview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/overviewLabel"
+                android:layout_toEndOf="@id/posterImage"
+                android:layout_alignBottom="@+id/posterImage"
+                style="@style/TextStyle"
+                tools:text="Overview" />
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/castList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large"/>
+
+</LinearLayout>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#081c24</color>
+    <color name="colorPrimaryDark">#081c24</color>
+    <color name="colorAccent">#01d277</color>
+
+    <color name="progressBackground">#303030</color>
+    <color name="progressActive">#01d277</color>
+
+    <color name="itemBackground">#eee</color>
+    <color name="tabBackground">#eee</color>
+    <color name="pageBackground">#ccc</color>
+
+    <color name="textColorLight">#fff</color>
+    <color name="textColor">#777</color>
+    <color name="textColorDark">#333</color>
+</resources>
