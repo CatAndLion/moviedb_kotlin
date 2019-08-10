@@ -19,7 +19,7 @@
                 android:layout_width="@dimen/profile_width"
                 android:layout_height="@dimen/profile_height"
                 android:scaleType="centerCrop"
-                android:background="@color/pageBackground" />
+                android:src="@drawable/person_stub"/>
 
         <LinearLayout
                 android:orientation="vertical"

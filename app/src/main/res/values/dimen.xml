@@ -7,6 +7,10 @@
     <dimen name="profile_width">130dp</dimen>
     <dimen name="profile_height">160dp</dimen>
 
+    <dimen name="poster_list_height">200dp</dimen>
+
     <dimen name="poster_width">160dp</dimen>
     <dimen name="poster_height">230dp</dimen>
+
+    <dimen name="search_view_width">250dp</dimen>
 </resources>

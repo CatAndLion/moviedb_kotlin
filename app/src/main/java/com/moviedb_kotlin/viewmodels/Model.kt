@@ -1,6 +1,8 @@
 package com.moviedb_kotlin.viewmodels
 
 import com.moviedb_kotlin.protocol.*
+import java.text.SimpleDateFormat
+import java.util.*
 import com.moviedb_kotlin.protocol.Content as pContent
 import com.moviedb_kotlin.protocol.Person as pPerson
 
@@ -23,6 +25,7 @@ open class Content(val id: Int,
                    val title: String,
                    val overview: String?,
                    val posterPath: String?,
+                   val releaseDate: Date,
                    val type: ContentType,
                    val rating: Double) {
 
@@ -31,6 +34,7 @@ open class Content(val id: Int,
             return Content(item.id, item.title,
                 item.overview,
                 "${MovieDbApi.imageUrl}${item.posterPath}",
+                SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(item.releaseDate),
                 type, item.rating)
         }
     }
@@ -42,11 +46,11 @@ class ContentFull(id: Int,
                   posterPath: String?,
                   type: ContentType,
                   rating: Double,
-                  val releaseDate: String,
+                  releaseDate: Date,
                   val budget: Int,
                   val status: String,
                   val genre: List<String>):
-    com.moviedb_kotlin.viewmodels.Content(id, title, overview, posterPath, type, rating) {
+    com.moviedb_kotlin.viewmodels.Content(id, title, overview, posterPath, releaseDate, type, rating) {
 
     var cast: List<Person> = listOf()
 
@@ -55,14 +59,16 @@ class ContentFull(id: Int,
         fun fromProtocol(item: Movie): ContentFull {
             return ContentFull(item.id, item.title, item.overview,
                 "${MovieDbApi.imageUrl}${item.posterPath}",
-                ContentType.Movie, item.rating, item.releaseDate,
+                ContentType.Movie, item.rating,
+                SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(item.releaseDate),
                 item.budget, "", item.genres.map { it.name })
         }
 
         fun fromProtocol(item: TvShow): ContentFull {
             return ContentFull(item.id, item.title, item.overview,
                 "${MovieDbApi.imageUrl}${item.posterPath}",
-                ContentType.Movie, item.rating, item.airDate,
+                ContentType.Movie, item.rating,
+                SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(item.releaseDate),
                 0, item.status, item.genres.map { it.name })
         }
     }

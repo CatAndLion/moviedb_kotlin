@@ -1,9 +1,11 @@
 package com.moviedb_kotlin.adapters
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.moviedb_kotlin.R
@@ -11,6 +13,8 @@ import com.moviedb_kotlin.utils.GlideAppModule
 import com.moviedb_kotlin.viewmodels.Content
 
 import kotlinx.android.synthetic.main.content_item.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.math.roundToInt
 
 class ContentListAdapter(context: Context, limit: Int,
@@ -29,6 +33,14 @@ class ContentListAdapter(context: Context, limit: Int,
 
 class ContentItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
+    companion object {
+        fun getRatingColor(context: Context, rating: Double): Int {
+            return ResourcesCompat.getColor(context.resources,
+                if(rating < 3) R.color.ratingLow else if(rating < 6) R.color.ratingMedium else R.color.ratingHigh,
+                null)
+        }
+    }
+
     fun fill(item: Content, listener: ItemClickListener?) {
 
         itemView.setOnClickListener {
@@ -37,14 +49,19 @@ class ContentItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
         itemView.title.text = item.title
         itemView.overview.text = item.overview
+        itemView.releaseDate.text = SimpleDateFormat("MMMM dd, yyyy", Locale.US).format(item.releaseDate)
 
         val rating = (item.rating * 10).roundToInt()
         itemView.rating.text = "$rating%"
         itemView.ratingBar.progress = rating
 
+        itemView.ratingBar.progressTintList = ColorStateList.valueOf(getRatingColor(itemView.context, item.rating))
+
         if(!TextUtils.isEmpty(item.posterPath)) {
             GlideAppModule.getRequest(itemView.posterImage, GlideAppModule.CacheOptions.Memory)
-                .load(item.posterPath).into(itemView.posterImage)
+                .load(item.posterPath)
+                .error(R.drawable.movie_poster_stub)
+                .into(itemView.posterImage)
 
         } else {
             itemView.posterImage.setImageResource(R.drawable.no_poster)

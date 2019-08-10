@@ -43,7 +43,9 @@ class CastListAdapter(context: Context): RecyclerView.Adapter<CastListAdapter.Ca
 
             if(!TextUtils.isEmpty(item.posterPath)) {
                 GlideAppModule.getRequest(itemView, GlideAppModule.CacheOptions.Memory)
-                    .load(item.posterPath).into(itemView.profileImage)
+                    .load(item.posterPath)
+                    .error(R.drawable.person_stub)
+                    .into(itemView.profileImage)
             }
         }
     }

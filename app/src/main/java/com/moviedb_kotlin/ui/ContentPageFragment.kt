@@ -1,7 +1,7 @@
 package com.moviedb_kotlin.ui
 
-import android.content.Context
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,12 +16,14 @@ import com.moviedb_kotlin.adapters.ItemClickListener
 import com.moviedb_kotlin.viewmodels.Content
 import com.moviedb_kotlin.viewmodels.ContentListViewModel
 import com.moviedb_kotlin.viewmodels.ContentType
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
 class ContentPageFragment(val type: ContentType): Fragment(), ItemClickListener {
 
     override fun itemClicked(view: View, item: Content) {
-
+        searchHolder.closeSearch(false)
+        searchHolder.setIconVisible(false)
         fragmentManager!!.beginTransaction()
             .replace(R.id.detailsPageContainer, ContentDetailsFragment.instantinate(item))
             .addToBackStack(null)
@@ -30,6 +32,7 @@ class ContentPageFragment(val type: ContentType): Fragment(), ItemClickListener 
 
     lateinit var viewModel: ContentListViewModel
     lateinit var adapter: ContentListAdapter
+    lateinit var searchHolder: SearchViewHolder
 
     var disposables = CompositeDisposable()
 
@@ -40,11 +43,28 @@ class ContentPageFragment(val type: ContentType): Fragment(), ItemClickListener 
         viewModel.contentType = type
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        // query changed
+        if(activity is SearchViewHolder) {
+            searchHolder = activity as SearchViewHolder
+            disposables.add(searchHolder.getSearchQuery()
+                .observeOn(AndroidSchedulers.mainThread())
+                .map { it }
+                .subscribe {query ->
+                    if(!TextUtils.equals(query, viewModel.query)) {
+                        // reload
+                        adapter.clear()
+                        viewModel.loadData(0, query)
+                    }
+                }
+            )
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         val view = inflater.inflate(R.layout.content_page, container, false)
 
         val list = view.findViewById<RecyclerView>(R.id.contentList)
@@ -66,7 +86,8 @@ class ContentPageFragment(val type: ContentType): Fragment(), ItemClickListener 
         disposables.add(viewModel.newData.subscribe {list ->
             adapter.total = viewModel.total
             adapter.addData(list)
-            adapter.notifyItemRangeInserted(adapter.size - 1, list.size)
+            adapter.notifyDataSetChanged()
+            //adapter.notifyItemRangeInserted(adapter.size - 1, list.size)
         })
 
         disposables.add(adapter.offsetObservable.subscribe {offset ->

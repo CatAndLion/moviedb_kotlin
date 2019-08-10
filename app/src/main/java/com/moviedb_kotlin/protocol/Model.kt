@@ -8,6 +8,8 @@ open class Content(val id: Int,
                    val overview: String?,
                    @SerializedName("poster_path")
                    val posterPath: String?,
+                   @SerializedName("release_date", alternate = ["first_air_date"])
+                   val releaseDate: String,
                    @SerializedName("vote_average")
                    val rating: Double)
 
@@ -21,20 +23,18 @@ class Person(val id: Int, val name: String,
              val profilePath: String)
 
 class Movie(id: Int, title: String,
-            overview: String, posterPath: String, rating: Double,
+            overview: String, posterPath: String,
+            rating: Double, releaseDate: String,
             val budget: Int,
-            @SerializedName("release_date")
-            val releaseDate: String,
             val runtime: Int?,
             val genres: Array<Genre>
-            ): Content(id, title, overview, posterPath, rating)
+            ): Content(id, title, overview, posterPath, releaseDate, rating)
 
 class TvShow(id: Int, title: String,
-             overview: String, posterPath: String, rating: Double,
+             overview: String, posterPath: String,
+             rating: Double, releaseDate: String,
              val status: String,
              val genres: Array<Genre>,
              @SerializedName("created_by")
-             val creators: Array<Creator>,
-             @SerializedName("first_air_date")
-             val airDate: String
-             ): Content(id, title, overview, posterPath, rating)
+             val creators: Array<Creator>
+             ): Content(id, title, overview, posterPath, releaseDate, rating)

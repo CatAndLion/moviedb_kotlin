@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/itemBackground"
-              android:padding="@dimen/margin_large">
+              android:padding="@dimen/margin_default">
 
     <RelativeLayout
             android:layout_width="match_parent"
@@ -68,10 +68,20 @@
                 android:layout_marginEnd="@dimen/margin_default"/>
 
         <TextView
+                android:id="@+id/releaseDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/posterImage"
+                android:layout_marginBottom="@dimen/margin_small"
+                style="@style/TitleTextStyle"
+                tools:text="Release date"/>
+
+        <TextView
                 android:id="@+id/overviewLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/posterImage"
+                android:layout_below="@id/releaseDate"
                 android:text="Overview"
                 android:layout_marginBottom="@dimen/margin_small"
                 style="@style/TitleTextStyle"/>
@@ -83,6 +93,7 @@
                 android:layout_below="@id/overviewLabel"
                 android:layout_toEndOf="@id/posterImage"
                 android:layout_alignBottom="@+id/posterImage"
+                android:ellipsize="end"
                 style="@style/TextStyle"
                 tools:text="Overview" />
 

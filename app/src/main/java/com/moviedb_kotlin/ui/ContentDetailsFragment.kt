@@ -1,5 +1,6 @@
 package com.moviedb_kotlin.ui
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -12,12 +13,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.moviedb_kotlin.R
 import androidx.transition.*
 import com.moviedb_kotlin.adapters.CastListAdapter
+import com.moviedb_kotlin.adapters.ContentItemViewHolder
 import com.moviedb_kotlin.utils.GlideAppModule
 import com.moviedb_kotlin.viewmodels.Content
 import com.moviedb_kotlin.viewmodels.ContentDetailsViewModel
 import com.moviedb_kotlin.viewmodels.ContentFull
 import com.moviedb_kotlin.viewmodels.ContentType
 import kotlinx.android.synthetic.main.content_details.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.math.roundToInt
 
 class ContentDetailsFragment: Fragment() {
@@ -79,9 +83,14 @@ class ContentDetailsFragment: Fragment() {
         viewModel.content.observe(this, Observer<ContentFull> { item ->
             view.overview.text = item.overview
 
+            view.releaseDate.text = SimpleDateFormat("MMMM dd, yyyy", Locale.US).format(item.releaseDate)
+
             val rating = (item.rating * 10).roundToInt()
             view.rating.text = "$rating%"
             view.ratingBar.progress = rating
+
+            view.ratingBar.progressTintList = ColorStateList.valueOf(ContentItemViewHolder
+                .getRatingColor(context!!, item.rating))
 
             view.genre.text = TextUtils.join(", ", item.genre)
 

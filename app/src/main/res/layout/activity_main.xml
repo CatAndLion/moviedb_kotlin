@@ -13,16 +13,35 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary">
 
-        <TextView
-                android:id="@+id/title"
+        <ViewFlipper
+                android:id="@+id/titleFlipper"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="The Movies \nDatabase"
-                android:lines="2"
-                style="@style/ToolbarTitleStyle"
-                android:drawableStart="@drawable/moviedb_logo"
-                android:drawablePadding="@dimen/margin_small"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_gravity="center_horizontal"
+                android:inAnimation="@anim/anim_up"
+                android:outAnimation="@anim/anim_down">
+
+            <TextView
+                    android:id="@+id/mainTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="The Movies \nDatabase"
+                    android:lines="2"
+                    style="@style/ToolbarTitleStyle"
+                    android:drawableStart="@drawable/moviedb_logo"
+                    android:drawablePadding="@dimen/margin_small"
+                    android:layout_gravity="center_horizontal"/>
+
+            <androidx.appcompat.widget.SearchView
+                    android:id="@+id/searchField"
+                    android:layout_width="@dimen/search_view_width"
+                    android:layout_height="wrap_content"
+                    app:iconifiedByDefault="false"
+                    app:closeIcon="@null"
+                    app:queryBackground="@null"
+                    style="@style/SearchViewStyle"/>
+
+        </ViewFlipper>
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -44,21 +63,12 @@
 
             </com.google.android.material.tabs.TabLayout>
 
-            <!--
-            <EditText
-                    android:id="@+id/searchField"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/SearchFieldStyle" />
-                    -->
-
             <androidx.viewpager.widget.ViewPager
                     android:id="@+id/contentPages"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 
         </LinearLayout>
-
 
         <FrameLayout
                 android:id="@+id/detailsPageContainer"

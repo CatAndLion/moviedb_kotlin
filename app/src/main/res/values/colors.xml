@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#081c24</color>
     <color name="colorAccent">#01d277</color>
 
+    <color name="colorPrimaryLight">#223444</color>
+
     <color name="progressBackground">#303030</color>
     <color name="progressActive">#01d277</color>
 
@@ -14,4 +16,8 @@
     <color name="textColorLight">#fff</color>
     <color name="textColor">#777</color>
     <color name="textColorDark">#333</color>
+
+    <color name="ratingHigh">#01d277</color>
+    <color name="ratingMedium">#FFC107</color>
+    <color name="ratingLow">#D82A0C</color>
 </resources>
