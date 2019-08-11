@@ -11,7 +11,7 @@ class ContentPagerAdapter(manager: FragmentManager, behaviour: Int):
 
     override fun getItem(position: Int): Fragment {
         val type = if(position == 0) ContentType.Movie else ContentType.TvShow
-        return ContentPageFragment(type)
+        return ContentPageFragment.instantinate(type)
     }
 
     override fun getCount(): Int = 2

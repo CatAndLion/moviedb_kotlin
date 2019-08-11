@@ -5,18 +5,26 @@ import java.text.SimpleDateFormat
 import java.util.*
 import com.moviedb_kotlin.protocol.Content as pContent
 import com.moviedb_kotlin.protocol.Person as pPerson
+import com.moviedb_kotlin.database.Content as dbContent
+import com.moviedb_kotlin.database.Person as dbPerson
 
 enum class ContentType {
     Movie, TvShow;
 }
 
-class Person(val name: String,
+class Person(val id: Int,
+             val name: String,
              val character: String,
              val posterPath: String) {
 
     companion object {
         fun fromProtocol(item: pPerson): Person {
-            return Person(item.name, item.character, "${MovieDbApi.imageUrl}${item.profilePath}")
+            return Person(item.id, item.name, item.character,
+                "${MovieDbApi.imageUrl}${item.profilePath}")
+        }
+
+        fun fromDatabase(item: dbPerson): Person {
+            return Person(item.id, item.name, item.character, item.posterPath)
         }
     }
 }
@@ -25,7 +33,7 @@ open class Content(val id: Int,
                    val title: String,
                    val overview: String?,
                    val posterPath: String?,
-                   val releaseDate: Date,
+                   val releaseDate: Date?,
                    val type: ContentType,
                    val rating: Double) {
 
@@ -34,7 +42,9 @@ open class Content(val id: Int,
             return Content(item.id, item.title,
                 item.overview,
                 "${MovieDbApi.imageUrl}${item.posterPath}",
-                SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(item.releaseDate),
+                if(Regex("^\\d{4}-\\d{2}-\\d{2}\$").matches(item.releaseDate))
+                    SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(item.releaseDate)
+                else null,
                 type, item.rating)
         }
     }
@@ -46,9 +56,8 @@ class ContentFull(id: Int,
                   posterPath: String?,
                   type: ContentType,
                   rating: Double,
-                  releaseDate: Date,
+                  releaseDate: Date?,
                   val budget: Int,
-                  val status: String,
                   val genre: List<String>):
     com.moviedb_kotlin.viewmodels.Content(id, title, overview, posterPath, releaseDate, type, rating) {
 
@@ -56,20 +65,38 @@ class ContentFull(id: Int,
 
     companion object {
 
+        fun fromDatabase(item: dbContent): ContentFull {
+            val cast = List(item.cast.size) {
+                Person.fromDatabase(item.cast[it]!!)
+            }
+            val genre = List(item.genre.size) {
+                item.genre[it]!!
+            }
+            return ContentFull(item.id, item.title, item.overview, item.posterPath,
+                ContentType.values()[item.type], item.rating, Date(), item.budget,
+                genre).apply {
+                this.cast = cast
+            }
+        }
+
         fun fromProtocol(item: Movie): ContentFull {
             return ContentFull(item.id, item.title, item.overview,
                 "${MovieDbApi.imageUrl}${item.posterPath}",
                 ContentType.Movie, item.rating,
-                SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(item.releaseDate),
-                item.budget, "", item.genres.map { it.name })
+                if(Regex("^\\d{4}-\\d{2}-\\d{2}\$").matches(item.releaseDate))
+                    SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(item.releaseDate)
+                else null,
+                item.budget, item.genres.map { it.name })
         }
 
         fun fromProtocol(item: TvShow): ContentFull {
             return ContentFull(item.id, item.title, item.overview,
                 "${MovieDbApi.imageUrl}${item.posterPath}",
                 ContentType.Movie, item.rating,
-                SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(item.releaseDate),
-                0, item.status, item.genres.map { it.name })
+                if(Regex("^\\d{4}-\\d{2}-\\d{2}\$").matches(item.releaseDate))
+                    SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(item.releaseDate)
+                else null,
+                0, item.genres.map { it.name })
         }
     }
 }

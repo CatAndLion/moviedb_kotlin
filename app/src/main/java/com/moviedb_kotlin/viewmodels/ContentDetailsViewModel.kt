@@ -3,7 +3,6 @@ package com.moviedb_kotlin.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.moviedb_kotlin.command.*
-import io.reactivex.disposables.Disposable
 
 class ContentDetailsViewModel: ViewModel() {
 
@@ -13,21 +12,21 @@ class ContentDetailsViewModel: ViewModel() {
 
     var content = MutableLiveData<ContentFull>()
 
-    fun loadData(id: Int): Disposable {
+    fun loadData(id: Int) {
 
         val command = when(contentType) {
-            ContentType.Movie -> CommandGetMovie(id)
-            ContentType.TvShow -> CommandGetTvShow(id)
+            ContentType.Movie -> GetMovieCommand(id)
+            ContentType.TvShow -> GetTvShowCommand(id)
         }
 
-        return CommandExecutor.with(command).execute { state ->
+        val d = CommandExecutor.execute(command) { state ->
             isLoading.value = state.running
             if(state is DataState<*>) {
                 content.value = state.data as ContentFull
 
                 // get cast list
                 val id = content.value?.id ?: 0
-                CommandExecutor.with(GetCastCommand(id, contentType)).execute { state ->
+                CommandExecutor.execute(GetCastCommand(id, contentType)) { state ->
                     if(state is ListState<*>) {
                         content.value?.cast = state.data as List<Person>
                         content.postValue(content.value)

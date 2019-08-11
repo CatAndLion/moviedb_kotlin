@@ -16,9 +16,8 @@ import java.util.concurrent.TimeUnit
 
 interface SearchViewHolder {
     fun getSearchQuery(): Observable<String>
-    fun openSearch()
-    fun closeSearch(clearQuery: Boolean)
-    fun setIconVisible(value: Boolean)
+    fun setSearchVisible(visible: Boolean)
+    fun setSearchActive(enabled: Boolean)
 }
 
 class MainActivity: AppCompatActivity(), SearchViewHolder {
@@ -29,6 +28,7 @@ class MainActivity: AppCompatActivity(), SearchViewHolder {
 
     private var searchItem: MenuItem? = null
 
+    var searchEnabled: Boolean = true
     val searchViewVisible: Boolean
         get() = titleFlipper.displayedChild == 1
 
@@ -74,10 +74,10 @@ class MainActivity: AppCompatActivity(), SearchViewHolder {
         item?.let {
             when(item.itemId) {
                 R.id.search_item -> {
-                    if(searchViewVisible) {
-                        closeSearch(true)
+                    if(searchViewVisible && !TextUtils.isEmpty(searchField.query)) {
+                        searchField.setQuery("", true)
                     } else {
-                        openSearch()
+                        setSearchVisible(!searchViewVisible)
                     }
                 }
             }
@@ -89,33 +89,28 @@ class MainActivity: AppCompatActivity(), SearchViewHolder {
         return searchTextObservable
     }
 
-    override fun openSearch() {
-        if(!searchViewVisible) {
-            titleFlipper.showNext()
-            searchItem?.setIcon(R.drawable.close_icon)
-        }
-    }
-
-    override fun closeSearch(clearQuery: Boolean) {
-        if(searchViewVisible) {
-            if (clearQuery && !TextUtils.isEmpty(searchField.query)) {
-                searchField.setQuery("", true)
-            } else {
+    override fun setSearchVisible(visible: Boolean) {
+        if(searchEnabled) {
+            if (searchViewVisible != visible) {
+                searchItem?.setIcon(if(visible) R.drawable.close_icon else R.drawable.search_icon)
                 titleFlipper.showNext()
-                searchItem?.setIcon(R.drawable.search_icon)
             }
         }
     }
 
-    override fun setIconVisible(value: Boolean) {
-        searchItem?.isVisible = value
+    override fun setSearchActive(enabled: Boolean) {
+        if(!enabled) {
+            setSearchVisible(false)
+        }
+        searchEnabled = enabled
+        searchItem?.isVisible = enabled
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        setIconVisible(true)
+        setSearchActive(true)
         if(!TextUtils.isEmpty(searchField.query)) {
-            openSearch()
+            setSearchVisible(true)
         }
     }
 }

@@ -83,7 +83,9 @@ class ContentDetailsFragment: Fragment() {
         viewModel.content.observe(this, Observer<ContentFull> { item ->
             view.overview.text = item.overview
 
-            view.releaseDate.text = SimpleDateFormat("MMMM dd, yyyy", Locale.US).format(item.releaseDate)
+            view.releaseDate.text = item.releaseDate?.let {
+                SimpleDateFormat("MMMM dd, yyyy", Locale.US).format(item.releaseDate)
+            }
 
             val rating = (item.rating * 10).roundToInt()
             view.rating.text = "$rating%"

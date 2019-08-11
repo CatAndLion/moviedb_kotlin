@@ -5,7 +5,7 @@ import com.moviedb_kotlin.viewmodels.ContentFull
 import io.reactivex.Observable
 
 
-class CommandGetMovie(val id: Int): Command<ContentFull>() {
+class GetMovieCommand(val id: Int): Command<ContentFull>() {
 
     override fun getCall(): Observable<ContentFull> {
 

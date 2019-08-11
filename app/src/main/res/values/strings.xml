@@ -5,4 +5,7 @@
     <string name="poster_transition_name" translatable="false">poster</string>
 
     <string name="search_item_title">Search</string>
+
+    <string name="movie_date_title">Release date</string>
+    <string name="tv_date_title">First aired</string>
 </resources>

@@ -11,8 +11,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.moviedb_kotlin.R
 import com.moviedb_kotlin.utils.GlideAppModule
 import com.moviedb_kotlin.viewmodels.Content
+import kotlinx.android.synthetic.main.content_details.view.*
 
 import kotlinx.android.synthetic.main.content_item.view.*
+import kotlinx.android.synthetic.main.content_item.view.overview
+import kotlinx.android.synthetic.main.content_item.view.posterImage
+import kotlinx.android.synthetic.main.content_item.view.rating
+import kotlinx.android.synthetic.main.content_item.view.ratingBar
+import kotlinx.android.synthetic.main.content_item.view.releaseDate
+import kotlinx.android.synthetic.main.content_item.view.title
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
@@ -49,7 +56,10 @@ class ContentItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
         itemView.title.text = item.title
         itemView.overview.text = item.overview
-        itemView.releaseDate.text = SimpleDateFormat("MMMM dd, yyyy", Locale.US).format(item.releaseDate)
+
+        itemView.releaseDate.text = item.releaseDate?.let {
+            SimpleDateFormat("MMMM dd, yyyy", Locale.US).format(item.releaseDate)
+        }
 
         val rating = (item.rating * 10).roundToInt()
         itemView.rating.text = "$rating%"

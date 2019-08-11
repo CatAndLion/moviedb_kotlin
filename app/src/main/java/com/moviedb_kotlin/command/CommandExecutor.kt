@@ -4,15 +4,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-class CommandExecutor<C>(val command: Command<C>) {
+object CommandExecutor {
 
-    companion object {
-        fun <C> with(command: Command<C>): CommandExecutor<C> {
-            return CommandExecutor(command)
-        }
-    }
-
-    fun execute(consumer: (state: BaseState) -> Unit): Disposable {
+    fun <C> execute(command: Command<C>, consumer: (state: BaseState) -> Unit): Disposable {
         return command.getCall()
             .subscribeOn(Schedulers.io())
             .map {

@@ -19,11 +19,20 @@ import com.moviedb_kotlin.viewmodels.ContentType
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
-class ContentPageFragment(val type: ContentType): Fragment(), ItemClickListener {
+class ContentPageFragment: Fragment(), ItemClickListener {
+
+    companion object {
+        fun instantinate(type: ContentType): ContentPageFragment {
+            return ContentPageFragment().apply {
+                val args = Bundle()
+                args.putInt("TYPE", type.ordinal)
+                arguments = args
+            }
+        }
+    }
 
     override fun itemClicked(view: View, item: Content) {
-        searchHolder.closeSearch(false)
-        searchHolder.setIconVisible(false)
+        searchHolder.setSearchActive(false)
         fragmentManager!!.beginTransaction()
             .replace(R.id.detailsPageContainer, ContentDetailsFragment.instantinate(item))
             .addToBackStack(null)
@@ -33,12 +42,14 @@ class ContentPageFragment(val type: ContentType): Fragment(), ItemClickListener 
     lateinit var viewModel: ContentListViewModel
     lateinit var adapter: ContentListAdapter
     lateinit var searchHolder: SearchViewHolder
+    lateinit var type: ContentType
 
     var disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        type = ContentType.values()[arguments?.getInt("TYPE") ?: 0]
         viewModel = ViewModelProviders.of(this)[ContentListViewModel::class.java]
         viewModel.contentType = type
     }

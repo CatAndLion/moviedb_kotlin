@@ -24,6 +24,8 @@ class ContentListViewModel : ViewModel() {
     val data: MutableList<Content> = mutableListOf()
     val newData = PublishSubject.create<List<Content>>()
 
+    var disposable: Disposable? = null
+
     val hasPagesToLoad: Boolean
         get() = total > data.size
 
@@ -31,15 +33,18 @@ class ContentListViewModel : ViewModel() {
         isLoading.value = false
     }
 
-    fun loadData(offset: Int = 0, query: String? = null): Disposable {
+    fun loadData(offset: Int = 0, query: String? = null) {
+        if(disposable?.isDisposed == false) {
+            disposable?.dispose()
+        }
+
         this.query = query
         if(offset == 0) {
             this.total = 0
             this.data.clear()
         }
 
-        return CommandExecutor.with(GetTrendingCommand(10, offset, contentType, query))
-            .execute { state ->
+        disposable = CommandExecutor.execute(GetTrendingCommand(10, offset, contentType, query)) { state ->
 
                 isLoading.value = state.running
                 currentError.value = state.errorMessage

@@ -4,7 +4,7 @@ import com.moviedb_kotlin.loaders.ApiDataLoader
 import com.moviedb_kotlin.viewmodels.ContentFull
 import io.reactivex.Observable
 
-class CommandGetTvShow(val id: Int): Command<ContentFull>() {
+class GetTvShowCommand(val id: Int): Command<ContentFull>() {
 
     override fun getCall(): Observable<ContentFull> {
         return ApiDataLoader().getTvShow(id).map {
